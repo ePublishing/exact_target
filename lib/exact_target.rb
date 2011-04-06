@@ -4,6 +4,7 @@ require 'nokogiri'
 require 'uri'
 
 require 'exact_target/net_https_hack'
+require 'exact_target/builder_ext'
 require 'exact_target/string_ext'
 
 require 'exact_target/configuration'

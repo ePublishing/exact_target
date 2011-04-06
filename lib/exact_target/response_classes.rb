@@ -36,20 +36,24 @@ module ExactTarget
       def class_from_et_attributes(base, name, *attribute_names)
         lines = ["class #{name}"]
         attribute_names.flatten.each_with_index do |a, i|
-          rb_a = a.to_s.underscore.gsub(' ', '_')
-          a = a.to_s.gsub(' ', '__')
-          lines << "attr_accessor :#{a}"
-          if rb_a != a
-            lines << "alias :#{rb_a} :#{a}"
-            lines << "alias :#{rb_a}= :#{a}="
-          end
-          if i == 0
-            lines << "alias :to_s :#{a}"
-          end
+          add_et_attribute(lines, a.to_s, i)
         end
         lines << "end"
         base.module_eval(lines * "\n")
         base.const_get(name)
+      end
+
+      def add_et_attribute(lines, attr, i)
+        rb_a = attr.underscore.gsub(' ', '_')
+        et_a = attr.gsub(' ', '__')
+        lines << "attr_accessor :#{et_a}"
+        if rb_a != et_a
+          lines << "alias :#{rb_a} :#{et_a}"
+          lines << "alias :#{rb_a}= :#{et_a}="
+        end
+        if i == 0
+          lines << "alias :to_s :#{et_a}"
+        end
       end
 
     end

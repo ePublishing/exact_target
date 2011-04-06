@@ -13,15 +13,15 @@ module ExactTarget
 
     def list_add(list_name, list_type=nil)
       list_type = :public unless %w(public private salesforce).include?(list_type.to_s)
-      build(:list, :add) do
-        list_type list_type.to_s
-        list_name list_name.to_s
+      build(:list, :add) do |li|
+        li.list_type list_type.to_s
+        li.list_name list_name.to_s
       end
     end
 
     def list_edit(list_id, new_list_name)
-      build(:list, :edit, :listid, list_id) do
-        list_name new_list_name.to_s
+      build(:list, :edit, :listid, list_id) do |li|
+        li.list_name new_list_name.to_s
       end
     end
 
@@ -34,18 +34,13 @@ module ExactTarget
     end
 
     def list_import(list_id, file_name, file_mapping, options={})
-      build(:list, :import, :listid, list_id) do
-        file_name       file_name
-        email_address   options[:email_address].to_s
-        file_type       options[:file_type] || (file_name =~ /\.txt$/i ? 'tab' : 'csv')
-        column_headings options[:column_headings] || true
-        file_mapping do |fm|
+      options = list_import_default_options(options, file_name)
+      build(:list, :import, :listid, list_id) do |li|
+        li.tags_from_options! options, :file_name, :email_address, :file_type, :column_headings
+        li.file_mapping do |fm|
           file_mapping.each { |m| fm.field(m) }
         end
-        import_type     options[:import_type] || 0
-        returnid        options[:returnid] || true
-        encrypted       options[:encrypted] || false
-        encrypt_format  options[:encrypt_format]
+        li.tags_from_options! options, :import_type, :returnid, :encrypted, :encrypt_format
       end
     end
 
@@ -62,8 +57,8 @@ module ExactTarget
       unless status.nil? or %w(Active Unsubscribed Returned Undeliverable Deleted).include?(status)
         raise "Invalid status: #{status}"
       end
-      build(:list, :retrieve_sub, :listid, list_id) do
-        search_status status unless status.nil?
+      build(:list, :retrieve_sub, :listid, list_id) do |li|
+        li.search_status status unless status.nil?
       end
     end
 
@@ -96,17 +91,17 @@ module ExactTarget
     ###################################################################
 
     def subscriber_add(list_id, subscriber_info, update=true)
-      build(:subscriber, :add, :listid, list_id, :search_value2 => nil) do
-        values do |vs|
+      build(:subscriber, :add, :listid, list_id, :search_value2 => nil) do |sub|
+        sub.values do |vs|
           subscriber_info.each { |k, v| vs.tag! k.to_s, v }
         end
-        tag! 'update', update
+        sub.update update
       end
     end
 
     def subscriber_edit(list_id, orig_email, subscriber_info)
-      build(:subscriber, :edit, :listid, list_id, :search_value2 => orig_email) do
-        values do |vs|
+      build(:subscriber, :edit, :listid, list_id, :search_value2 => orig_email) do |sub|
+        sub.values do |vs|
           subscriber_info.each { |k, v| vs.tag! k.to_s, v }
         end
       end
@@ -123,8 +118,8 @@ module ExactTarget
     end
 
     def subscriber_masterunsub(*email_addresses)
-      build(:subscriber, :masterunsub, :emailaddress, :search_value => :omit) do
-        search_value do |sv|
+      build(:subscriber, :masterunsub, :emailaddress, :search_value => :omit) do |sub|
+        sub.search_value do |sv|
           email_addresses.flatten.each { |a| sv.emailaddress(a) }
         end
       end
@@ -142,66 +137,56 @@ module ExactTarget
              else
                name.nil? ? nil : :emailname
              end
-      build(:email, :retrieve, type, name, :sub_action => :all, :search_value2 => nil) do
-        daterange do |r|
+      build(:email, :retrieve, type, name, :sub_action => :all, :search_value2 => nil) do |em|
+        em.daterange do |r|
           r.startdate start_date if start_date
-          r.enddate   end_date    if end_date
+          r.enddate   end_date   if end_date
         end
       end
     end
 
     def email_add(name, subject, options)
-      build(:email, :add, :search_type => :omit, :search_value => :omit, :sub_action => 'HTMLPaste') do
-        category
-        email_name name
-        email_subject subject
+      build(:email, :add, :search_type => :omit, :search_value => :omit, :sub_action => 'HTMLPaste') do |em|
+        em.category
+        em.email_name name
+        em.email_subject subject
         if options.has_key? :body
-          email_body { |eb| eb.cdata! options[:body] }
+          em.email_body { |eb| eb.cdata! options[:body] }
         elsif options.has_key? :file
-          file_name options[:file]
+          em.file_name options[:file]
         end
       end
     end
 
     def email_add_text(email_id, options)
       build(:email, :add, :search_type => :emailid,
-                  :search_value => email_id, :sub_action => :text) do
+                  :search_value => email_id, :sub_action => :text) do |em|
         if options.has_key? :body
-          email_body { |eb| eb.cdata! options[:body] }
+          em.email_body { |eb| eb.cdata! options[:body] }
         elsif options.has_key? :file
-          file_name options[:file]
+          em.file_name options[:file]
         end
       end
     end
 
     def email_retrieve_body(email_id)
-      build(:email, :retrieve, :emailid, email_id, :sub_action => :htmlemail) do |e|
-        e.search_value2
-        e.search_value3
+      build(:email, :retrieve, :emailid, email_id, :sub_action => :htmlemail) do |em|
+        em.search_value2
+        em.search_value3
       end
     end
 
     ###################################################################
 
     def job_send(email_id, list_ids, options={})
-      options = options.nil? ? {} : options.dup # Don't munge hash passed in
-      options[:multipart_mime] = false unless options.has_key? :multipart_mime
-      options[:track_links]    = true  unless options.has_key? :track_links
-      options[:test_send]      = false unless options.has_key? :test_send
-      options[:send_date]    ||= :immediate
-      options[:suppress_ids] ||= []
+      options = job_send_default_options(options)
 
       build(:job, :send, :emailid, email_id) do |job|
-        %w(from_name from_email additional multipart_mime
-           track_links send_date send_time).each do |field|
-          job.tag! field, options[field.to_sym].to_s
-        end
-        job.lists do |li|
-          [list_ids].flatten.compact.each { |id| li.list id }
-        end
-        job.suppress do |li|
-          [options[:suppress_ids]].flatten.compact.each { |id| li.list id }
-        end
+        job.tags_from_options! options, :from_name, :from_email, :additional,
+                                        :multipart_mime, :track_links,
+                                        :send_date, :send_time
+        job_send_id_list job, :lists, list_ids
+        job_send_id_list job, :suppress, options[:suppress_ids]
         job.test_send options[:test_send]
       end
     end
@@ -209,6 +194,33 @@ module ExactTarget
     ###################################################################
     private
     ###################################################################
+
+    def list_import_default_options(options, file_name)
+      options = options.dup
+      options[:file_name]         = file_name
+      options[:file_type]       ||= (file_name =~ /\.txt$/i ? 'tab' : 'csv')
+      options[:column_headings] ||= true
+      options[:import_type]     ||= 0
+      options[:returnid]        ||= true
+      options[:encrypted]       ||= false
+      options
+    end
+
+    def job_send_default_options(options)
+      options = options.nil? ? {} : options.dup # Don't munge hash passed in
+      options[:multipart_mime] = false unless options.has_key? :multipart_mime
+      options[:track_links]    = true  unless options.has_key? :track_links
+      options[:test_send]      = false unless options.has_key? :test_send
+      options[:send_date]    ||= :immediate
+      options[:suppress_ids] ||= []
+      options
+    end
+
+    def job_send_id_list(job, tag, ids)
+      job.tag!(tag.to_s) do |li|
+        [ids].flatten.compact.each { |id| li.list id }
+      end
+    end
 
     def et_date(d)
       d = Date.parse(d) if d.is_a?(String)
@@ -225,20 +237,7 @@ module ExactTarget
           a.password @config.password
         end
         et.system do |s|
-          s.system_name system_name.to_s
-          s.action action.to_s
-          [:sub_action, :search_type, :search_value, :search_value2].each do |k|
-            if options[k] == :omit
-              #ignore
-            elsif k == :search_value and options[k].is_a?(Array)
-              s.search_values do |ss|
-                options[k].each { |v| ss.search_value v }
-              end
-            elsif options.has_key?(k)
-              s.tag!(k.to_s, options[k].to_s)
-            end
-          end
-          s.instance_eval(&block) if block_given?
+          build_system(s, system_name, action, options, &block)
         end
       end
       xml.to_s
@@ -249,6 +248,25 @@ module ExactTarget
       options, search_value = search_value, nil if search_value.is_a?(Hash)
       options ||= {}
       { :search_type => search_type, :search_value => search_value }.merge(options)
+    end
+
+    def build_system(s, system_name, action, options, &block)
+      s.system_name system_name.to_s
+      s.action action.to_s
+      [:sub_action, :search_type, :search_value, :search_value2].each do |name|
+        build_system_option(s, name, options[name]) if options.has_key? name
+      end
+      yield(s) if block_given?
+    end
+
+    def build_system_option(s, name, value)
+      if name == :search_value and value.is_a?(Array)
+        s.search_values do |ss|
+          value.each { |v| ss.search_value v }
+        end
+      elsif value != :omit
+        s.tag! name.to_s, value.to_s
+      end
     end
 
   end
