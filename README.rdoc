@@ -129,8 +129,11 @@ tracking functionality is yet implemented.
   # Retrieve all email IDs or filter by email name and/or date range.
   ExactTarget.email_retrieve
   ExactTarget.email_retrieve('Welcome to Fortune One!')
-  ExactTarget.email_retrieve(:start_date => Date.parse('2008-09-15'), :end_date => Date.parse('2008-10-15'))
-  ExactTarget.email_retrieve('Welcome to Fortune One!', :start_date => Date.parse('2008-09-15'), :end_date => Date.parse('2008-10-15'))
+  ExactTarget.email_retrieve(:start_date => Date.parse('2008-09-15'),
+                             :end_date => Date.parse('2008-10-15'))
+  ExactTarget.email_retrieve('Welcome to Fortune One!',
+                             :start_date => Date.parse('2008-09-15'),
+                             :end_date => Date.parse('2008-10-15'))
 
   # Create an email from HTML that you send to the ExactTarget application via an API call.
   ExactTarget.email_add('Your email name', 'Your subject line', :body => 'Your HTML email body')
@@ -161,6 +164,5 @@ tracking functionality is yet implemented.
 
 ---
 Author::   David McCullars <mailto:dmccullars@ePublishing.com>
-Version::  0.8.1
 Copyright:: (C) 2011 ePublishing
 Licence::  GPL[http://www.gnu.org/copyleft/gpl.html]
