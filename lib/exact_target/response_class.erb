@@ -1,0 +1,30 @@
+class <%= name %>
+
+  <% attributes.each do |rb_a, et_a| %>
+    attr_accessor :<%= rb_a %>
+
+    <% if rb_a != et_a %>
+    alias :<%= et_a %> :<%= rb_a %>
+    alias :<%= et_a %>= :<%= rb_a %>=
+    <% end %>
+  <% end %>
+
+  def attributes
+    [<%= attributes.map { |rb_a, et_a| ":#{rb_a}" } * ', ' %>]
+  end
+
+  def et_attributes
+    [<%= attributes.map { |rb_a, et_a| ":#{et_a}" } * ', ' %>]
+  end
+
+  def to_hash
+    attributes.map { |a| [a, send(a)] }
+  end
+
+  def to_et_hash
+    et_attributes.map { |a| [a, send(a)] }
+  end
+
+  alias :to_s :<%= attributes.first.first %>
+
+end

@@ -1,3 +1,5 @@
+require 'erb'
+
 module ExactTarget
   #
   # Response classes for ExactTarget.  We'll use these rather
@@ -42,26 +44,16 @@ module ExactTarget
       end
 
       def class_from_et_attributes(base, name, *attribute_names)
-        lines = ["class #{name}"]
-        attribute_names.flatten.each_with_index do |a, i|
-          add_et_attribute(lines, a.to_s, i)
+        attributes = attribute_names.flatten.map do |a|
+          [a.to_s.underscore.gsub(' ', '_'), a.to_s.gsub(' ', '__')]
         end
-        lines << "end"
-        base.module_eval(lines * "\n")
+        class_def = class_template.result(binding)
+        base.module_eval(class_def)
         base.const_get(name)
       end
 
-      def add_et_attribute(lines, attr, i)
-        rb_a = attr.underscore.gsub(' ', '_')
-        et_a = attr.gsub(' ', '__')
-        lines << "attr_accessor :#{et_a}"
-        if rb_a != et_a
-          lines << "alias :#{rb_a} :#{et_a}"
-          lines << "alias :#{rb_a}= :#{et_a}="
-        end
-        if i == 0
-          lines << "alias :to_s :#{et_a}"
-        end
+      def class_template
+        @class_template ||= ERB.new File.read(File.expand_path '../response_class.erb', __FILE__)
       end
 
     end

@@ -50,11 +50,11 @@ batch_inquire:
 ####################################################################################
 
 subscriber_add:
-  request:  <system_name>subscriber</system_name><action>add</action><search_type>listid</search_type><search_value>1234</search_value><search_value2></search_value2><values><Email__Address>test.person@company.com</Email__Address><status>active</status><Full__Name>Test Person</Full__Name><ChannelMemberID>5678</ChannelMemberID></values><update>true</update>
+  request:  <system_name>subscriber</system_name><action>add</action><search_type>listid</search_type><search_value>1234</search_value><search_value2></search_value2><values><Email__Address>someone@somehwere.com</Email__Address><Email__Type>HTML</Email__Type><First__Name>Some</First__Name><Last__Name>One</Last__Name><Title>Director of HR</Title><Region>Midwest</Region><status>active</status><ChannelMemberID>5678</ChannelMemberID></values><update>true</update>
   response: <subscriber><subscriber_info>Subscriber was added/updated successfully</subscriber_info><subscriber_description>12334566</subscriber_description></subscriber>
 
 subscriber_edit:
-  request:  <system_name>subscriber</system_name><action>edit</action><search_type>listid</search_type><search_value>63718</search_value><search_value2>user@email.com</search_value2><values><First__Name>User</First__Name><Email__Address>user1@hotmail.com</Email__Address><status>unsub</status><reason>insert your unsubscribe reason here</reason><ChannelMemberID>5678</ChannelMemberID></values>
+  request:  <system_name>subscriber</system_name><action>edit</action><search_type>listid</search_type><search_value>63718</search_value><search_value2>user@email.com</search_value2><values><Email__Address>someone@somehwere.com</Email__Address><Email__Type>HTML</Email__Type><First__Name>Some</First__Name><Last__Name>One</Last__Name><Title>Director of HR</Title><Region>Midwest</Region><status>unsub</status><reason>insert your unsubscribe reason here</reason><ChannelMemberID>5678</ChannelMemberID></values>
   response: <subscriber><subscriber_info>Subscriber was added/updated successfully</subscriber_info><subscriber_description>12334566</subscriber_description></subscriber>
 
 subscriber_retrieve:

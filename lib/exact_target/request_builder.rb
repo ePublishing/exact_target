@@ -90,20 +90,24 @@ module ExactTarget
 
     ###################################################################
 
-    def subscriber_add(list_id, subscriber_info, update=true)
-      build(:subscriber, :add, :listid, list_id, :search_value2 => nil) do |sub|
-        sub.values do |vs|
-          subscriber_info.each { |k, v| vs.tag! k.to_s, v }
-        end
-        sub.update update
-      end
+    def subscriber_add(list_id, subscriber, options={})
+      subscriber_edit(list_id, nil, subscriber, options)
     end
 
-    def subscriber_edit(list_id, orig_email, subscriber_info)
-      build(:subscriber, :edit, :listid, list_id, :search_value2 => orig_email) do |sub|
+    def subscriber_edit(list_id, orig_email, subscriber, options={})
+      options = subscriber_edit_default_options(options)
+      subscriber = subscriber.to_et_hash if subscriber.is_a?(Subscriber)
+      action = orig_email.nil? ? :add : :edit
+      build(:subscriber, action, :listid, list_id, :search_value2 => orig_email) do |sub|
         sub.values do |vs|
-          subscriber_info.each { |k, v| vs.tag! k.to_s, v }
+          subscriber.each do |k, v|
+            vs.tag!(k.to_s, v) unless k.to_s =~ /status/i
+          end
+          vs.status options[:status].to_s
+          vs.reason options[:reason] if options.has_key? :reason
+          vs.ChannelMemberID options[:ChannelMemberID] if options.has_key? :ChannelMemberID
         end
+        sub.update options[:update] if orig_email.nil?
       end
     end
 
@@ -203,6 +207,13 @@ module ExactTarget
       options[:import_type]     ||= 0
       options[:returnid]        ||= true
       options[:encrypted]       ||= false
+      options
+    end
+
+    def subscriber_edit_default_options(options)
+      options = options.dup
+      options[:status] = :active unless options[:status].to_s == 'unsub'
+      options[:update] = true unless options[:update] == false
       options
     end
 

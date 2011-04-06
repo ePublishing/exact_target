@@ -7,7 +7,7 @@ describe ExactTarget do
     desc = method.to_s
     desc << " with #{args.inspect}" unless args.empty?
     specify(desc) do
-      @res = et_request(method, args, desc)
+      @res = et_request(method, args.map { |a| a.is_a?(Proc) ? a.call : a }, desc)
       instance_eval(&block)
     end
   end
@@ -26,6 +26,18 @@ describe ExactTarget do
     @atts = ['Email Address', 'Status', 'Email Type', 'First Name',
              'Last Name', 'Title', 'Region'].map do |a|
       stub :att, :name => a
+    end
+  end
+
+  @example_subscriber = Proc.new do
+    ExactTarget::Subscriber.new.tap do |sub|
+      sub.email_address = 'someone@somehwere.com'
+      sub.status        = 'active'
+      sub.email_type    = 'HTML'
+      sub.first_name    = 'Some'
+      sub.last_name     = 'One'
+      sub.title         = 'Director of HR'
+      sub.region        = 'Midwest'
     end
   end
 
@@ -133,22 +145,14 @@ describe ExactTarget do
 
   #################################################################
 
-  test_et :subscriber_add, 1234, [
-      [:Email__Address, 'test.person@company.com'],
-      [:status, 'active'],
-      [:Full__Name, 'Test Person'],
-      [:ChannelMemberID, 5678],
-  ] do
+  test_et :subscriber_add, 1234, @example_subscriber, :status => 'active', :ChannelMemberID => 5678 do
     @res.should == 12334566
   end
 
-  test_et :subscriber_edit, 63718, 'user@email.com', [
-      [:First__Name, 'User'],
-      [:Email__Address, 'user1@hotmail.com'],
-      [:status, 'unsub'],
-      [:reason, 'insert your unsubscribe reason here'],
-      [:ChannelMemberID, 5678],
-  ] do
+  test_et :subscriber_edit, 63718, 'user@email.com', @example_subscriber,
+                            :status => 'unsub',
+                            :reason => 'insert your unsubscribe reason here',
+                            :ChannelMemberID => 5678 do
     @res.should == 12334566
   end
 
