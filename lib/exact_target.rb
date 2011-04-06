@@ -12,6 +12,9 @@ require 'exact_target/request_builder'
 require 'exact_target/response_classes'
 require 'exact_target/response_handler'
 
+# The ExactTarget library is a ruby implementation of the ExactTarget
+# email marketing api.  It allows for list/subscriber management,
+# email creation, and job initiation.
 module ExactTarget
 
   VERSION = File.read(File.expand_path '../../CHANGELOG', __FILE__)[/v([\d\.]+)\./, 1]

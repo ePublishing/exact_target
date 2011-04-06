@@ -1,8 +1,160 @@
-This is a pure ruby implementation of the ExactTarget API.
+= ExactTarget - A Ruby interface to the ExactTarget API.
+
+== Introduction
+
 ExactTarget is an email marketing solution provider with an
 http-based api for performing various tasks such as managing
 mailing lists, managing subscribers, and queueing up email
-jobs.
+jobs.  This gem is a pure ruby library for accessing that api.
+
+== Installation
+
+  gem install exact-target
+
+== Prerequisites
+
+The ExactTarget gem depends on both Nokogiri and Builder. Both
+should be installed automatically when them gem is installed
+(if not already installed).
+
+== Notes
 
 Currently this is a partial implementation.  None of the
 tracking functionality is yet implemented.
+
+== Usage
+
+=== Setup/Configuration
+
+  require 'exact_target'
+
+  ExactTarget.configure do |config|
+    config.username = 'my_username'
+    config.password = 'my_password'
+  end
+
+=== Account Information
+
+  # Retrieve subscriber attributes
+  ExactTarget.accountinfo_retrieve_attrbs
+
+=== List Management
+
+  # Retrieve all list ids
+  ExactTarget.list_retrieve
+
+  # Retrieve list id for given name
+  ExactTarget.list_retrieve('Some List')
+
+  # Retrieve list information by list id
+  ExactTarget.list_retrieve(15123512)
+
+  # Create new list
+  ExactTarget.list_add("My Test List", :private)
+
+  # Rename a list
+  ExactTarget.list_edit(15123512, "My RENAMED Test List")
+
+  # Import new or updated subscribers en mass from a comma-delimited
+  # or tab-delimited file into an existing subscriber list.
+  ExactTarget.list_import(15123512, 'sometestfile.txt', ['Email Address', 'Field 2', ...])
+  ExactTarget.list_import([id_1, id2, ...], 'sometestfile.txt', ['Email Address', 'Field 2', ...])
+
+  # Request an update on the status of an import.
+  ExactTarget.list_importstatus(some_import_id)
+
+  # Retrieve the profile and preference attributes for all subscribers
+  # (or all subscribers with a certain status) on a specified list.
+  ExactTarget.list_retrieve_sub(42, 'Active')
+
+  # Delete a list and all subscribers who belong to the list.
+  ExactTarget.list_delete(15123512)
+
+  # Retrieve all groups in your account.
+  ExactTarget.list_retrievegroups
+
+  # Refresh the membership of an attribute-based (rule-based) group
+  # to reflect any changes to your subscribers' attribute values.
+  ExactTarget.list_refresh_group(3514)
+
+  # Request an update on the status of a group refresh.
+  ExactTarget.batch_inquire(8912)
+
+=== Subscriber Management
+
+  # Add a subscriber to a list.
+  subscriber = {
+    :Email__Address => 'test.person@company.com',
+    :status => 'active',
+    :Full__Name => 'George',
+    :ChannelMemberID => 5678
+  }
+  ExactTarget.subscriber_add(1234, subscriber, true)
+
+  # Update the attributes (including email address) and/or status of
+  # an existing subscriber. Can be used to reactivate a subscriber
+  # who was placed on the master unsubscribe list.
+  subscriber = {
+    :Email__Address => 'new.email.address@company.com',
+    :status => 'unsub',
+    :Full__Name => 'Frank',
+    :ChannelMemberID => 3312
+  }
+  ExactTarget.subscriber_edit(63718, 'previous@email.com', subscriber)
+
+  # Retrieve all profile and preference attribute data entered for a
+  # subscriber on a specific list, or retrieve all attribute data for
+  # a subscriber and all lists to which the subscriber belongs.
+  ExactTarget.subscriber_retrieve(123456, 'someone@example.com')
+  ExactTarget.subscriber_retrieve(123456789)
+
+  # Delete a subscriber from your database, or remove a subscriber
+  # from a specified list.
+  ExactTarget.subscriber_delete(112233445566, 'bob@hotmail.com')
+  ExactTarget.subscriber_delete(112233445566)
+
+  # Place a subscriber's (or multiple subscribers') email address on
+  # your Master Unsubscribe list so that the email address is never
+  # added to any of your subscriber lists.
+  ExactTarget.subscriber_masterunsub 'someone@email.com', 'someone.else@email.com', ...
+
+=== Mailing Management
+
+  # Retrieve all email IDs or filter by email name and/or date range.
+  ExactTarget.email_retrieve
+  ExactTarget.email_retrieve('Welcome to Fortune One!')
+  ExactTarget.email_retrieve(:start_date => Date.parse('2008-09-15'), :end_date => Date.parse('2008-10-15'))
+  ExactTarget.email_retrieve('Welcome to Fortune One!', :start_date => Date.parse('2008-09-15'), :end_date => Date.parse('2008-10-15'))
+
+  # Create an email from HTML that you send to the ExactTarget application via an API call.
+  ExactTarget.email_add('Your email name', 'Your subject line', :body => 'Your HTML email body')
+  ExactTarget.email_add('Your email name', 'Your subject line', :file => 'Filename')
+
+  # Create the text version of an email, which will be displayed
+  # to any subscriber whose email client does not support HTML email.
+  ExactTarget.email_add_text(email_id, :body => 'Your text email body')
+  ExactTarget.email_add_text(email_id, :file => 'Filename')
+
+  # Retrieve the body of the HTML version of any email in your account.
+  ExactTarget.email_retrieve_body(email_id)
+
+=== Job Initiation
+
+  # Kick off a mailing (test or live)
+  ExactTarget.job_send(email_id,
+                       [list_id_1, list_id_2, ...],
+                       :suppress_ids => [list_id_3, ...],
+                       :from_name => 'John Doe',
+                       :from_email => 'jd@nowhere.com',
+                       :additional => 'additional information for job',
+                       :multipart_mime => true,
+                       :track_links => false,
+                       :send_date => '5/3/2011',
+                       :send_time => '17:35',
+                       :test_send => true)
+
+---
+Author::   David McCullars <mailto:dmccullars@ePublishing.com>
+Version::  0.8.1
+Copyright:: (C) 2011 ePublishing
+Licence::  GPL[http://www.gnu.org/copyleft/gpl.html]
