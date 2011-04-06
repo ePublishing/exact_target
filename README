@@ -1,0 +1,8 @@
+This is a pure ruby implementation of the ExactTarget API.
+ExactTarget is an email marketing solution provider with an
+http-based api for performing various tasks such as managing
+mailing lists, managing subscribers, and queueing up email
+jobs.
+
+Currently this is a partial implementation.  None of the
+tracking functionality is yet implemented.

@@ -1,0 +1,133 @@
+---
+accountinfo_retrieve_attrbs:
+  request:  <system_name>accountinfo</system_name><action>retrieve_attrbs</action><search_type></search_type><search_value></search_value>
+  response: <profile><attribute><name>A1</name><description>A1 description</description><default_value/><data_type>text</data_type><required>False</required><min_size>0</min_size><max_size>100</max_size><subscriber_editable>1</subscriber_editable><display>A1 name</display></attribute><attribute><name>A2</name><description>A2 description</description><default_value>HTML</default_value><data_type>text</data_type><required>True</required><min_size>0</min_size><max_size>2000</max_size><subscriber_editable>1</subscriber_editable><display>A2 name</display><values><value>HTML</value><value>Text</value></values></attribute></profile>
+
+list_retrieve:
+  epub test:
+    request:  <system_name>list</system_name><action>retrieve</action><search_type>listname</search_type><search_value>epub test</search_value>
+    response: <list><listid>42</listid><listid>47</listid></list>
+  42:
+    request:  <system_name>list</system_name><action>retrieve</action><search_type>listid</search_type><search_value>42</search_value>
+    response: <list><list_name>My Test List</list_name><list_type>Private</list_type><modified>1/25/2010 1:26:58 PM</modified><subscriber_count>15287</subscriber_count><active_total>9426</active_total><held_count>120</held_count><bounce_count>4145</bounce_count><unsub_count>1596</unsub_count></list>
+
+list_add:
+  request:  <system_name>list</system_name><action>add</action><search_type></search_type><search_value></search_value><list_type>private</list_type><list_name>Epub Test</list_name>
+  response: <list><list_info>List was added successfully</list_info><list_description>53</list_description></list>
+
+list_edit:
+  request:  <system_name>list</system_name><action>edit</action><search_type>listid</search_type><search_value>42</search_value><list_name>Epub Test - RENAME</list_name>
+  response: <list><list_info>List was modified successfully</list_info><list_description>42</list_description></list>
+
+list_import:
+  request:  <system_name>list</system_name><action>import</action><search_type>listid</search_type><search_values><search_value>72</search_value><search_value>33</search_value><search_value>99</search_value></search_values><file_name>sometestfile.txt</file_name><email_address>testme@nowhere.com</email_address><file_type>tab</file_type><column_headings>true</column_headings><file_mapping><field>some_field</field><field>other_field</field></file_mapping><import_type>0</import_type><returnid>true</returnid><encrypted>false</encrypted><encrypt_format></encrypt_format>
+  response: <list><import_info>Your file is being imported. You will receive an email when it completes.</import_info><importid>841</importid></list>
+
+list_importstatus:
+  request:  <system_name>list</system_name><action>import</action><sub_action>importstatus</sub_action><search_value>119792</search_value>
+  response: <list><import_info>Complete</import_info><importid>979804</importid></list>
+
+list_retrieve_sub:
+  request:  <system_name>list</system_name><action>retrieve_sub</action><search_type>listid</search_type><search_value>42</search_value><search_status>Active</search_status>
+  response: <list><subscribers><subscriber><Email__Address>bob@example.com</Email__Address><Status>Active</Status><Email__Type>HTML</Email__Type><First__Name>Bob</First__Name><Last__Name/></subscriber><subscriber><Email__Address>mary@example.com</Email__Address><Status>Active</Status><Email__Type>HTML</Email__Type><First__Name>Mary</First__Name><Last__Name>Smith</Last__Name></subscriber></subscribers></list>
+
+list_delete:
+  request:  <system_name>list</system_name><action>delete</action><search_type>listid</search_type><search_value>42</search_value>
+  response: <list><list_info>List was deleted successfully</list_info><list_description>42</list_description></list>
+
+list_retrievegroups:
+  request:  <system_name>list</system_name><action>retrievegroups</action><search_type>groups</search_type><search_value></search_value>
+  response: <list><groups><group><parentlistID>41</parentlistID><groupID>12</groupID><groupName>yyy</groupName><description>xxx</description></group><group><parentlistID>77</parentlistID><groupID>875</groupID><groupName>test group</groupName><description>test desc</description></group></groups></list>
+
+list_refresh_group:
+  request:  <system_name>list</system_name><action>refresh_group</action><sub_action></sub_action><search_value>3514</search_value><search_value2></search_value2>
+  response: <list><groupRefresh><groupID>3514</groupID><groupAsyncID>6127</groupAsyncID></groupRefresh></list>
+
+batch_inquire:
+  request:  <system_name>batch</system_name><action>inquire</action><sub_action></sub_action><search_type>batchid</search_type><search_value>8912</search_value><search_value2></search_value2>
+  response: <Batch><batchid>40594104</batchid><status>Completed</status><filename></filename></Batch>
+
+####################################################################################
+
+subscriber_add:
+  request:  <system_name>subscriber</system_name><action>add</action><search_type>listid</search_type><search_value>1234</search_value><search_value2></search_value2><values><Email__Address>test.person@company.com</Email__Address><status>active</status><Full__Name>Test Person</Full__Name><ChannelMemberID>5678</ChannelMemberID></values><update>true</update>
+  response: <subscriber><subscriber_info>Subscriber was added/updated successfully</subscriber_info><subscriber_description>12334566</subscriber_description></subscriber>
+
+subscriber_edit:
+  request:  <system_name>subscriber</system_name><action>edit</action><search_type>listid</search_type><search_value>63718</search_value><search_value2>user@email.com</search_value2><values><First__Name>User</First__Name><Email__Address>user1@hotmail.com</Email__Address><status>unsub</status><reason>insert your unsubscribe reason here</reason><ChannelMemberID>5678</ChannelMemberID></values>
+  response: <subscriber><subscriber_info>Subscriber was added/updated successfully</subscriber_info><subscriber_description>12334566</subscriber_description></subscriber>
+
+subscriber_retrieve:
+  '123456, someone@example.com':
+    request:  <system_name>subscriber</system_name><action>retrieve</action><search_type>listid</search_type><search_value>123456</search_value><search_value2>someone@example.com</search_value2>
+    response: <subscriber><subid>125704849</subid><listid>63718</listid><list_name>Newsletter List</list_name><Email__Address>jdoe@example.com</Email__Address><Status>Active</Status><Email__Type>HTML</Email__Type><First__Name>John</First__Name><Last__Name>Doe</Last__Name><Title/><Region/><showChannelID>123456</showChannelID></subscriber>
+
+  123456789:
+    request:  <system_name>subscriber</system_name><action>retrieve</action><search_type>subid</search_type><search_value>123456789</search_value><search_value2></search_value2>
+    response: <subscriber><subid>125704849</subid><listid>63718</listid><list_name>NewsletterList</list_name><Email__Address>jdoe@example.com</Email__Address><Status>Active</Status><Email__Type>HTML</Email__Type><First__Name>John</First__Name><Last__Name>Doe</Last__Name><Title/><Region/></subscriber><subscriber><subid>125504849</subid><listid>63719</listid><list_name>TechnologyUpdate</list_name><Email__Address>jdoe@example.com</Email__Address><Status>Active</Status><Email__Type>HTML</Email__Type><First__Name>John</First__Name><Last__Name>Doe</Last__Name><Title/><Region/></subscriber>
+
+subscriber_delete:
+  '112233445566, bob@hotmail.com':
+    request:  <system_name>subscriber</system_name><action>delete</action><search_type>listid</search_type><search_value>112233445566</search_value><search_value2>bob@hotmail.com</search_value2>
+    response: <subscriber><subscriber_info> Subscriber Deleted Successfully </subscriber_info></subscriber>
+
+  112233445566:
+    request:  <system_name>subscriber</system_name><action>delete</action><search_type>subid</search_type><search_value>112233445566</search_value><search_value2></search_value2>
+    response: <subscriber><subscriber_info> Subscriber Deleted Successfully </subscriber_info></subscriber>
+
+subscriber_masterunsub:
+  request:  <system_name>subscriber</system_name><action>masterunsub</action><search_type>emailaddress</search_type><search_value><emailaddress>Email1@example.com</emailaddress><emailaddress>Email2@example.com</emailaddress><emailaddress>Email3@example.com</emailaddress></search_value>
+  response: <subscriber><subscriberunsub><emailaddress>Email1@example.com</emailaddress><status>masterunsub</status></subscriberunsub><subscriberunsub><emailaddress>Email2@example.com</emailaddress><status>masterunsub</status></subscriberunsub><subscriberunsub><emailaddress>Email3@example.com</emailaddress><status>masterunsub</status></subscriberunsub></subscriber>
+
+####################################################################################
+
+email_retrieve:
+  '':
+    request:  <system_name>email</system_name><action>retrieve</action><sub_action>all</sub_action><search_type></search_type><search_value></search_value><search_value2></search_value2><daterange></daterange>
+    response: <email><emaillist><emailid>104022</emailid><emailname>HTML Training</emailname><emailsubject>Northern Outfitters</emailsubject><emailcreateddate>3/1/2004</emailcreateddate><categoryid>75163</categoryid></emaillist><emaillist><emailid>138167</emailid><emailname>Conversion Tracking</emailname><emailsubject>Conversion Tracking Advanced Test</emailsubject><emailcreateddate>9/23/2003</emailcreateddate><categoryid>75163</categoryid></emaillist><emaillist><emailid>205449</emailid><emailname>ET 04 Demo Email</emailname><emailsubject>ET 04 Demo Email</emailsubject><emailcreateddate>3/19/2004</emailcreateddate><categoryid>75163</categoryid></emaillist></email>
+
+  'Welcome to Fortune One!':
+    request:  <system_name>email</system_name><action>retrieve</action><sub_action>all</sub_action><search_type>emailname</search_type><search_value>Welcome to Fortune One!</search_value><search_value2></search_value2><daterange></daterange>
+    response: <email><emaillist><emailid>104022</emailid><emailname>HTML Training</emailname><emailsubject>Northern Outfitters</emailsubject><emailcreateddate>3/1/2004</emailcreateddate><categoryid>75163</categoryid></emaillist><emaillist><emailid>138167</emailid><emailname>Conversion Tracking</emailname><emailsubject>Conversion Tracking Advanced Test</emailsubject><emailcreateddate>9/23/2003</emailcreateddate><categoryid>75163</categoryid></emaillist><emaillist><emailid>205449</emailid><emailname>ET 04 Demo Email</emailname><emailsubject>ET 04 Demo Email</emailsubject><emailcreateddate>3/19/2004</emailcreateddate><categoryid>75163</categoryid></emaillist></email>
+
+  HASH:
+    request:  <system_name>email</system_name><action>retrieve</action><sub_action>all</sub_action><search_type>daterange</search_type><search_value></search_value><search_value2></search_value2><daterange><startdate>9/15/2008</startdate><enddate>10/15/2008</enddate></daterange>
+    response: <email><emaillist><emailid>104022</emailid><emailname>HTML Training</emailname><emailsubject>Northern Outfitters</emailsubject><emailcreateddate>3/1/2004</emailcreateddate><categoryid>75163</categoryid></emaillist><emaillist><emailid>138167</emailid><emailname>Conversion Tracking</emailname><emailsubject>Conversion Tracking Advanced Test</emailsubject><emailcreateddate>9/23/2003</emailcreateddate><categoryid>75163</categoryid></emaillist><emaillist><emailid>205449</emailid><emailname>ET 04 Demo Email</emailname><emailsubject>ET 04 Demo Email</emailsubject><emailcreateddate>3/19/2004</emailcreateddate><categoryid>75163</categoryid></emaillist></email>
+
+  'Welcome to Fortune One!, HASH':
+    request:  <system_name>email</system_name><action>retrieve</action><sub_action>all</sub_action><search_type>emailnameanddaterange</search_type><search_value>Welcome to Fortune One!</search_value><search_value2></search_value2><daterange><startdate>9/15/2008</startdate><enddate>10/15/2008</enddate></daterange>
+    response: <email><emaillist><emailid>104022</emailid><emailname>HTML Training</emailname><emailsubject>Northern Outfitters</emailsubject><emailcreateddate>3/1/2004</emailcreateddate><categoryid>75163</categoryid></emaillist><emaillist><emailid>138167</emailid><emailname>Conversion Tracking</emailname><emailsubject>Conversion Tracking Advanced Test</emailsubject><emailcreateddate>9/23/2003</emailcreateddate><categoryid>75163</categoryid></emaillist><emaillist><emailid>205449</emailid><emailname>ET 04 Demo Email</emailname><emailsubject>ET 04 Demo Email</emailsubject><emailcreateddate>3/19/2004</emailcreateddate><categoryid>75163</categoryid></emaillist></email>
+
+email_add:
+  'Your body email name, Your email subject line, HASH':
+    request:  <system_name>email</system_name><action>add</action><sub_action>HTMLPaste</sub_action><category/><email_name>Your body email name</email_name><email_subject>Your email subject line</email_subject><email_body><![CDATA[Your HTML email body]]></email_body>
+    response: <email><emailID>44180</emailID></email>
+
+  'Your file email name, Your email subject line, HASH':
+    request:  <system_name>email</system_name><action>add</action><sub_action>HTMLPaste</sub_action><category/><email_name>Your file email name</email_name><email_subject>Your email subject line</email_subject><file_name>Filename</file_name>
+    response: <email><emailID>44180</emailID></email>
+
+email_add_text:
+  '155324, HASH':
+    request:  <system_name>email</system_name><action>add</action><sub_action>text</sub_action><search_type>emailid</search_type><search_value>155324</search_value><email_body><![CDATA[Your text email body]]></email_body>
+    response: <email><email_info>Email updated successfully/email_info></email>
+
+  '155325, HASH':
+    request:  <system_name>email</system_name><action>add</action><sub_action>text</sub_action><search_type>emailid</search_type><search_value>155325</search_value><file_name>Filename</file_name>
+    response: <email><email_info>Email updated successfully/email_info></email>
+
+email_retrieve_body:
+  request:  <system_name>email</system_name><action>retrieve</action><sub_action>htmlemail</sub_action><search_type>emailid</search_type><search_value>12344556</search_value><search_value2/><search_value3/>
+  response: <email><emailid>932890</emailid><htmlbody><![CDATA[<h1>...BODY...</h1>]]></htmlbody></email>
+
+####################################################################################
+
+job_send:
+  request:  <system_name>job</system_name><action>send</action><search_type>emailid</search_type><search_value>112233</search_value><from_name>FrName</from_name><from_email>fr.email@nowhere.com</from_email><additional>addit</additional><multipart_mime>true</multipart_mime><track_links>false</track_links><send_date>5/3/2011</send_date><send_time>17:35</send_time><lists><list>12345</list><list>12346</list></lists><suppress><list>35612</list></suppress><test_send>true</test_send>
+  response: <job><job_info>Job was successfully created.</job_info><job_description>2030602</job_description></job>
+
+  'BOGUS, , ':
+    request:  <system_name>job</system_name><action>send</action><search_type>emailid</search_type><search_value>BOGUS</search_value><from_name></from_name><from_email></from_email><additional></additional><multipart_mime>false</multipart_mime><track_links>true</track_links><send_date>immediate</send_date><send_time></send_time><lists></lists><suppress></suppress><test_send>false</test_send>
+    response: <list><error>68</error><error_description>File does not exist.</error_description></list>
+
+####################################################################################
