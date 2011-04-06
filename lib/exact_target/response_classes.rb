@@ -31,6 +31,14 @@ module ExactTarget
             self, :Subscriber, accountinfo_retrieve_attrbs.map(&:name)
           )
         end
+
+        def base.const_missing(name)
+          if name.to_sym == :Subscriber
+            subscriber_class
+          else
+            super
+          end
+        end
       end
 
       def class_from_et_attributes(base, name, *attribute_names)

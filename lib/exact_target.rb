@@ -35,21 +35,23 @@ module ExactTarget
     # values for all ExactTarget configuration options. See ExactTarget::Configuration.
     attr_accessor :configuration
 
-    def configure
+    def configure(username=nil, password=nil)
       self.configuration ||= Configuration.new
-      yield(configuration)
+      configuration.username = username if username
+      configuration.password = password if password
+      yield(configuration) if block_given?
       self.builder = RequestBuilder.new(configuration)
       self.handler = ResponseHandler.new(configuration)
       nil
     end
 
     def verify_configure
-      raise "ExactTarget must be configured before using" unless configuration.valid?
+      raise "ExactTarget must be configured before using" if configuration.nil? or !configuration.valid?
     end
 
     def log(level, message)
       verify_configure
-      configuration.logger.send(level, message) unless configuration.nil? or configuration.logger.nil?
+      configuration.logger.send(level, message) unless configuration.logger.nil?
     end
 
     def call(method, *args, &block)
@@ -81,9 +83,11 @@ module ExactTarget
       end
     end
 
-    def exact_target_methods
-      verify_configure
-      builder.public_methods(false) & handler.public_methods(false)
+    # Define ExactTarget methods
+    (RequestBuilder.instance_methods(false) & ResponseHandler.instance_methods(false)).each do |m|
+      define_method(m) do |*args, &block|
+        call(m, *args, &block)
+      end
     end
 
     private
@@ -97,14 +101,6 @@ module ExactTarget
         raise Error.new(error.text.to_i, error_description.text)
       else
         resp
-      end
-    end
-
-    def method_missing(method, *args, &block)
-      if builder.respond_to?(method) and handler.respond_to?(method)
-        call(method, *args, &block)
-      else
-        super
       end
     end
   end
