@@ -1,4 +1,5 @@
 require 'exact_target'
+require 'yaml'
 
 describe ExactTarget do
 
