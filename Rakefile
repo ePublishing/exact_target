@@ -39,8 +39,8 @@ end
 desc 'generate API documentation to doc/rdocs/index.html'
 Rake::RDocTask.new do |rd|
   rd.rdoc_dir = 'doc/rdocs'
-  rd.main = 'README'
-  rd.rdoc_files.include 'README', 'CHANGELOG', 'lib/**/*.rb'
+  rd.main = 'README.rdoc'
+  rd.rdoc_files.include 'README.rdoc', 'CHANGELOG', 'lib/**/*.rb'
   rd.rdoc_files.exclude '**/string_ext.rb', '**/net_https_hack.rb'
   rd.options << '--inline-source'
   rd.options << '--line-numbers'

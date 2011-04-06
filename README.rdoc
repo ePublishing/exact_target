@@ -7,9 +7,15 @@ http-based api for performing various tasks such as managing
 mailing lists, managing subscribers, and queueing up email
 jobs.  This gem is a pure ruby library for accessing that api.
 
-== Installation
+== Resources
+
+=== Installation
 
   gem install exact-target
+
+=== Git Repository
+
+http://github.com/ePublishing/exact_target
 
 == Prerequisites
 

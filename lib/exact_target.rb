@@ -39,14 +39,20 @@ module ExactTarget
       yield(configuration)
       self.builder = RequestBuilder.new(configuration)
       self.handler = ResponseHandler.new(configuration)
+      nil
+    end
+
+    def verify_configure
+      raise "ExactTarget must be configured before using" unless configuration.valid?
     end
 
     def log(level, message)
+      verify_configure
       configuration.logger.send(level, message) unless configuration.nil? or configuration.logger.nil?
     end
 
     def call(method, *args, &block)
-      raise "ExactTarget must be configured before using" unless configuration.valid?
+      verify_configure
 
       request = builder.send(method, *args, &block)
       log :debug, "#{LOG_PREFIX}REQUEST: #{request}"
@@ -60,6 +66,7 @@ module ExactTarget
     end
 
     def send_to_exact_target(request)
+      verify_configure
       uri = URI.parse "#{configuration.base_url}?qf=xml&xml=#{URI.escape request}"
       http = Net::HTTP.new(uri.host, uri.port)
       http.use_ssl = configuration.secure?
@@ -73,9 +80,15 @@ module ExactTarget
       end
     end
 
+    def exact_target_methods
+      verify_configure
+      builder.public_methods(false) & handler.public_methods(false)
+    end
+
     private
 
     def parse_response_xml(xml)
+      verify_configure
       resp = Nokogiri.parse(xml)
       error = resp.xpath('//error[1]').first
       error_description = resp.xpath('//error_description[1]').first
