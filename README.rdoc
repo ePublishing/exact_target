@@ -89,24 +89,26 @@ tracking functionality is yet implemented.
 === Subscriber Management
 
   # Add a subscriber to a list.
-  subscriber = {
-    :Email__Address => 'test.person@company.com',
-    :status => 'active',
-    :Full__Name => 'George',
-    :ChannelMemberID => 5678
-  }
-  ExactTarget.subscriber_add(1234, subscriber, true)
+  subscriber = ExactTarget::Subscriber.new.tap do |s|
+    s.email_address = 'test.person@company.com'
+    s.full_name     = 'George Wills'
+  end
+  ExactTarget.subscriber_add(1234, subscriber,
+                             :status => :active,
+                             :update => true,
+                             :ChannelMemberID => 5678)
 
   # Update the attributes (including email address) and/or status of
   # an existing subscriber. Can be used to reactivate a subscriber
   # who was placed on the master unsubscribe list.
-  subscriber = {
-    :Email__Address => 'new.email.address@company.com',
-    :status => 'unsub',
-    :Full__Name => 'Frank',
-    :ChannelMemberID => 3312
-  }
-  ExactTarget.subscriber_edit(63718, 'previous@email.com', subscriber)
+  subscriber = ExactTarget::Subscriber.new.tap do |s|
+    s.email_address = 'new.email@company.com'
+    s.full_name     = 'Frank Jones'
+  end
+  ExactTarget.subscriber_edit(63718, 'previous@email.com', subscriber,
+                              :status => :unsub,
+                              :reason => 'Some reason ...',
+                              :ChannelMemberID => 5678)
 
   # Retrieve all profile and preference attribute data entered for a
   # subscriber on a specific list, or retrieve all attribute data for

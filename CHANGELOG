@@ -1,2 +1,3 @@
+v0.0.3. Allow for passing ExactTarget::Subscriber into subscriber_add and subscriber_edit
 v0.0.2. Some minor cleanup
 v0.0.1. First release.
