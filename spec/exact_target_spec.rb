@@ -23,6 +23,9 @@ describe ExactTarget do
       config.password = 'a_pass'
       config.logger   = @logger
     end
+  end
+
+  before(:each) do
     @atts = ['Email Address', 'Status', 'Email Type', 'First Name',
              'Last Name', 'Title', 'Region'].map do |a|
       stub :att, :name => a
@@ -39,6 +42,12 @@ describe ExactTarget do
       sub.title         = 'Director of HR'
       sub.region        = 'Midwest'
     end
+  end
+
+  specify "Subscriber constant" do
+    ExactTarget.should_receive(:subscriber_class).and_return('SC')
+    ExactTarget::Subscriber.should == 'SC'
+    expect { ExactTarget::BogusConstant }.should raise_error
   end
 
   specify :subscriber_class do
