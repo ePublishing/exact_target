@@ -1,3 +1,4 @@
+require 'rubygems'
 require 'exact_target'
 require 'yaml'
 

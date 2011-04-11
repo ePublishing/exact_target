@@ -1,30 +1,22 @@
 require 'rake'
-require 'rubygems'
+require 'echoe'
 require 'rake/rdoctask'
-require 'rake/gempackagetask'
 require 'spec/rake/spectask'
 
 task :default => :gem
 
-gem_spec = Gem::Specification.new do |s|
-  s.name = %q{exact-target}
-  s.version = File.read(File.expand_path '../CHANGELOG', __FILE__)[/v([\d\.]+)\./, 1]
+Echoe.new("exact-target") do |s|
   s.author = "David McCullars"
+  s.project = "exact-target"
   s.email = "dmccullars@ePublishing.com"
-  s.homepage = "https://github.com/ePublishing/exact_target"
-  s.files = FileList["lib/**/*"].to_a
-  s.require_path = "lib"
-  s.description = "ExactTarget API implementation"
-  s.add_dependency 'nokogiri', '>= 1.4.1'
-  s.add_dependency 'builder', '>= 2.1.2'
+  s.url = "http://github.com/ePublishing/exact_target"
+  s.docs_host = "http://rdoc.info/github/ePublishing/exact_target/master/frames"
+  s.rdoc_pattern = /README|TODO|LICENSE|CHANGELOG|BENCH|COMPAT|exceptions|behaviors|exact-target.rb/
+  s.clean_pattern += ["ext/lib", "ext/include", "ext/share", "ext/libexact-target-?.??", "ext/bin", "ext/conftest.dSYM"]
   s.summary = <<DONE
 This is a pure-ruby implementation of the ExactTarget api.
 For more information consule http://www.exacttarget.com/.
 DONE
-end
-
-Rake::GemPackageTask.new(gem_spec) do |pkg|
-  pkg.need_tar = true
 end
 
 desc "Run all specs"
@@ -34,7 +26,6 @@ Spec::Rake::SpecTask.new('spec') do |t|
   t.rcov = true
   t.rcov_opts = ['--exclude', 'spec']
 end
-
 
 desc 'generate API documentation to doc/rdocs/index.html'
 Rake::RDocTask.new do |rd|
@@ -47,4 +38,3 @@ Rake::RDocTask.new do |rd|
   rd.options << '--all'
   rd.options << '--fileboxes'
 end
-
