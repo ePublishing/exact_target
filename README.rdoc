@@ -20,7 +20,7 @@ http://github.com/ePublishing/exact_target
 == Prerequisites
 
 The ExactTarget gem depends on both Nokogiri and Builder. Both
-should be installed automatically when them gem is installed
+should be installed automatically when the gem is installed
 (if not already installed).
 
 == Notes
