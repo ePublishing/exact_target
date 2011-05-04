@@ -304,28 +304,57 @@ describe ExactTarget do
   #################################################################
 
   context :send_to_exact_target do
-    before(:each) do
-      @path = '/foo?qf=xml&xml=%3Csomexml/%3E'
-      @http = mock('Net::HTTP')
-      @http.should_receive(:use_ssl=).with(true)
-      @http.should_receive(:open_timeout=).with(2)
-      @http.should_receive(:read_timeout=).with(5)
-      Net::HTTP.should_receive(:new).with('base.url.com', 443).and_return(@http)
+    shared_examples_for "handling http response in general" do
+      before(:each) do
+        @path = '/foo?qf=xml&xml=%3Csomexml/%3E'
+        @http.should_receive(:use_ssl=).with(true)
+        @http.should_receive(:open_timeout=).with(2)
+        @http.should_receive(:read_timeout=).with(5)
+      end
+
+      specify :success do
+        resp = stub('Net::HTTPSuccess', :is_a? => true, :body => 'xyz')
+        @http.should_receive(:get).with(@path).and_return(resp)
+        ExactTarget.send_to_exact_target('<somexml/>').should == 'xyz'
+      end
+
+      specify :error do
+        resp = stub('Net::HTTPFailure', :error! => 'err')
+        @http.should_receive(:get).with(@path).and_return(resp)
+        ExactTarget.send_to_exact_target('<somexml/>').should == 'err'
+      end
     end
 
-    specify :success do
-      resp = stub('Net::HTTPSuccess', :is_a? => true, :body => 'xyz')
-      @http.should_receive(:get).with(@path).and_return(resp)
-      ExactTarget.send_to_exact_target('<somexml/>').should == 'xyz'
+    context 'without proxy' do
+      before(:each) do
+        @http = mock('Net::HTTP')
+        Net::HTTP.should_receive(:new).with('base.url.com', 443).and_return(@http)
+      end
+
+      it_should_behave_like "handling http response in general"
     end
 
-    specify :error do
-      resp = stub('Net::HTTPFailure', :error! => 'err')
-      @http.should_receive(:get).with(@path).and_return(resp)
-      ExactTarget.send_to_exact_target('<somexml/>').should == 'err'
+    context 'with proxy' do
+      before :each do
+        ExactTarget.configure do |config|
+          config.http_proxy = 'http://a.proxy.com:80'
+        end
+        @http_proxy = mock('Net::HTTP::Proxy')
+        @http = mock('Net::HTTP')
+        Net::HTTP.should_receive(:Proxy).with('a.proxy.com', 80).and_return(@http_proxy)
+        @http_proxy.should_receive(:new).with('base.url.com', 443).and_return(@http)
+      end
+
+      after :each do
+        ExactTarget.configure do |config|
+          config.http_proxy = nil
+        end
+      end
+
+      it_should_behave_like "handling http response in general"
     end
   end
-
+  
   specify "method_missing should throw normal error when bogus method" do
     expect { ExactTarget.bogus }.should raise_error
   end
