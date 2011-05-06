@@ -54,7 +54,7 @@ module ExactTarget
     def list_retrieve_sub(resp)
       resp.xpath('//subscriber').map do |s|
         return [] if s.text =~ /no subscribers found/i
-        create_result(Subscriber, s)
+        create_result(ExactTarget::Subscriber, s)
       end
     end
 
@@ -84,7 +84,7 @@ module ExactTarget
       resp.xpath('//subscriber').map do |s|
         return [] if s.text =~ /no subscribers found/i
         sri = create_result(SubscriberInformation, s)
-        sri.subscriber = create_result(Subscriber, s)
+        sri.subscriber = create_result(ExactTarget::Subscriber, s)
         sri
       end
     end
