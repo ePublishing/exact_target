@@ -3,7 +3,7 @@ module ExactTarget
   class Configuration
 
     OPTIONS = [:base_url, :username, :password,
-               :http_open_timeout, :http_read_timeout].freeze
+               :http_open_timeout, :http_read_timeout, :http_proxy].freeze
 
     # The (optional) base URL for accessing ExactTarget (can be http or https).
     # Defaults to 'https://api.dc1.exacttarget.com/integrate.aspx'
@@ -23,6 +23,9 @@ module ExactTarget
 
     # The (optional) HTTP read timeout in seconds (defaults to 5).
     attr_accessor :http_read_timeout
+
+    # The (optional) HTTP proxy url
+    attr_accessor :http_proxy
 
     def initialize
       @base_url                 = 'https://api.dc1.exacttarget.com/integrate.aspx'

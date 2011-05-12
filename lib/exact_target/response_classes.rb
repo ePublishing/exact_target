@@ -30,7 +30,7 @@ module ExactTarget
 
         def base.subscriber_class
           @subscriber_class ||= ResponseClasses.class_from_et_attributes(
-            self, :Subscriber, accountinfo_retrieve_attrbs.map(&:name)
+            self, :Subscriber, accountinfo_retrieve_attrbs.map(&:name), :Status
           )
         end
 
@@ -44,7 +44,7 @@ module ExactTarget
       end
 
       def class_from_et_attributes(base, name, *attribute_names)
-        attributes = attribute_names.flatten.map do |a|
+        attributes = attribute_names.flatten.uniq.map do |a|
           [a.to_s.underscore.gsub(' ', '_'), a.to_s.gsub(' ', '__')]
         end
         class_def = class_template.result(binding)
