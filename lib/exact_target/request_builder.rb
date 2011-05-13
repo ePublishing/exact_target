@@ -241,7 +241,6 @@ module ExactTarget
     def build(system_name, action, search_type=nil, search_value=nil, options=nil, &block)
       options = parse_options(search_type, search_value, options)
       xml = Builder::XmlMarkup.new
-      xml.instruct! :xml, :version => "1.0", :encoding => nil
       xml = xml.exacttarget do |et|
         et.authorization do |a|
           a.username @config.username
@@ -251,7 +250,7 @@ module ExactTarget
           build_system(s, system_name, action, options, &block)
         end
       end
-      xml.to_s
+      %Q[<?xml version="1.0"?>#{xml}]
     end
 
     def parse_options(search_type, search_value, options)

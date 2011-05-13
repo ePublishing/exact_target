@@ -1,3 +1,5 @@
+require 'spec_helper'
+
 describe 'ExactTarget::NetHttpsHack' do
 
   it "should ignore those annoying cert warnings" do

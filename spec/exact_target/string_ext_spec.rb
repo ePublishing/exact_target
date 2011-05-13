@@ -1,3 +1,5 @@
+require 'spec_helper'
+
 describe 'ExactTarget::StringExt' do
 
   specify :underscore do

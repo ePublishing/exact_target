@@ -72,7 +72,7 @@ module ExactTarget
     def send_to_exact_target(request)
       verify_configure
       uri = URI.parse "#{configuration.base_url}?qf=xml&xml=#{URI.escape request}"
-      http = Net::HTTP.new(uri.host, uri.port)
+      http = net_http_or_proxy.new(uri.host, uri.port)
       http.use_ssl = configuration.secure?
       http.open_timeout = configuration.http_open_timeout
       http.read_timeout = configuration.http_read_timeout
@@ -92,6 +92,15 @@ module ExactTarget
     end
 
     private
+
+    def net_http_or_proxy
+      if configuration.http_proxy
+        proxy_uri = URI.parse(configuration.http_proxy)
+        Net::HTTP.Proxy(proxy_uri.host, proxy_uri.port)
+      else
+        Net::HTTP
+      end
+    end
 
     def parse_response_xml(xml)
       verify_configure

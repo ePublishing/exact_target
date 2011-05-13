@@ -19,14 +19,6 @@ For more information consule http://www.exacttarget.com/.
 DONE
 end
 
-desc "Run all specs"
-Spec::Rake::SpecTask.new('spec') do |t|
-  t.spec_opts = ['--options', %q("spec/spec.opts")]
-  t.spec_files = FileList['spec/**/*_spec.rb']
-  t.rcov = true
-  t.rcov_opts = ['--exclude', 'spec']
-end
-
 desc 'generate API documentation to doc/rdocs/index.html'
 Rake::RDocTask.new do |rd|
   rd.rdoc_dir = 'doc/rdocs'

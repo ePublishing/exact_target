@@ -1,6 +1,4 @@
-require 'rubygems'
-require 'exact_target'
-require 'yaml'
+require 'spec_helper'
 
 describe ExactTarget do
 
@@ -91,7 +89,7 @@ describe ExactTarget do
     @res.unsub_count.should == 1596
     @res.subscriber_count.should == 15287
     @res.bounce_count.should == 4145
-    @res.modified.should be_a(DateTime)
+    @res.modified.should be_a(Date)
     @res.held_count.should == 120
     @res.list_type.should == 'Private'
     @res.active_total.should == 9426
@@ -115,6 +113,12 @@ describe ExactTarget do
 
   test_et :list_importstatus, 119792 do
     @res.should == 'Complete'
+  end
+
+  specify "list_retrieve_sub with bogus status" do
+    expect do
+      ExactTarget.list_retrieve_sub(42, :bogus)
+    end.should raise_error(/Invalid status:/)
   end
 
   test_et :list_retrieve_sub, 42, 'Active' do
@@ -328,6 +332,23 @@ describe ExactTarget do
 
   specify "method_missing should throw normal error when bogus method" do
     expect { ExactTarget.bogus }.should raise_error
+  end
+
+  context :net_http_or_proxy do
+    after { ExactTarget.configuration.http_proxy = nil }
+
+    specify :proxy do
+      ExactTarget.configuration.http_proxy = 'http://a.proxy.com:9001'
+      clazz = ExactTarget.send(:net_http_or_proxy)
+      # A proxy class should have the same methods
+      clazz.should_not == Net::HTTP
+      (Net::HTTP.methods - clazz.methods).should be_empty
+      (Net::HTTP.instance_methods - clazz.instance_methods).should be_empty
+    end
+
+    specify :standard do
+      ExactTarget.send(:net_http_or_proxy).should == Net::HTTP
+    end
   end
 
   #################################################################

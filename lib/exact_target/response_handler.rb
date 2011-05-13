@@ -150,14 +150,14 @@ module ExactTarget
       case v
       when /^[+-]?\d+$/
         v.to_i
-      when /^([+-]?)(?=\dâ\d)\d*(\.\d*)?([Ee]([+-]?\d+))?$/
+      when /^([+-]?)\d+(\.\d*)?([Ee]([+-]?\d+))?$/
         v.to_f
       when /^true$/i
         true
       when /^false$/i
         false
-      when %r{^\d+/\d+/\d+ \d+:\d+:\d+ [AP]M$}i, %r{^\d+/\d+/\d+$}i
-        DateTime.parse(v)
+      when %r<^\d\d?/\d\d?/\d{4}>
+        Date.strptime(v, "%m/%d/%Y")
       else
         v.strip
       end
