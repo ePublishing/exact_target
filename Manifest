@@ -22,4 +22,3 @@ spec/exact_target/string_ext_spec.rb
 spec/exact_target_data.yml
 spec/exact_target_spec.rb
 spec/spec.opts
-spec/subscriber_list_spec.rb
