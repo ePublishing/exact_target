@@ -86,8 +86,8 @@ module ExactTarget
 
     # Define ExactTarget methods
     (RequestBuilder.instance_methods(false) & ResponseHandler.instance_methods(false)).each do |m|
-      define_method(m) do |*args, &block|
-        call(m, *args, &block)
+      define_method(m) do |*args|
+        call(m, *args)
       end
     end
 
