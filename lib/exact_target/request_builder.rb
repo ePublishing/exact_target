@@ -90,6 +90,24 @@ module ExactTarget
 
     ###################################################################
 
+    def triggered_send_add(external_key, channel_member_id, email_addresses, options={})
+      build(:triggeredsend, :add, :search_type => :omit, :search_value => :omit) do |operation|
+        operation.TriggeredSend('xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
+                                'xmlns:xsd' => 'http://www.w3.org/2001/XMLSchema',
+                                'xmlns' => 'http://exacttarget.com/wsdl/partnerAPI') do |ts|
+          ts.TriggeredSendDefinition do |tsd|
+            tsd.CustomerKey external_key
+            tsd.Priority 'High'
+          end
+          email_addresses.each do |addr|
+            build_ts_subscriber(ts, channel_member_id, addr, options)
+          end
+        end
+      end
+    end
+
+    ###################################################################
+
     def subscriber_add(list_id, subscriber, options={})
       subscriber_edit(list_id, nil, subscriber, options)
     end
@@ -279,5 +297,23 @@ module ExactTarget
       end
     end
 
+    def build_ts_subscriber(triggered_send, channel_member_id, email_address, options ={})
+      triggered_send.Subscribers('xmlns' => 'http://exacttarget.com/wsdl/partnerAPI') do |sub|
+        sub.Owner do |owner|
+          owner.Client do |client|
+            #client.ID $config[:exact_target_channel_member_id]
+            client.ID channel_member_id
+          end
+        end
+        sub.SubscriberKey email_address
+        sub.EmailAddress email_address
+        options.each do |key, value|
+          sub.Attributes do |atts|
+            atts.Name key.to_s
+            atts.Value value
+          end
+        end if options.present?
+      end
+    end
   end
 end
