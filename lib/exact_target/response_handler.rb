@@ -15,7 +15,7 @@ module ExactTarget
       handle_id_result resp, :import_info, :importid, /is being imported/i
     end
 
-    %w(email job list subscriber).each do |t|
+    %w(email job list subscriber triggered_send).each do |t|
       define_method "handle_#{t}_id_result", lambda { |resp|
         handle_id_result resp, "#{t}_info", "#{t}_description", /success/i
       }
@@ -28,6 +28,8 @@ module ExactTarget
         end
       end
     end
+
+    alias :triggered_send_add :handle_triggered_send_id_result
 
     alias :list_add :handle_list_id_result
 
