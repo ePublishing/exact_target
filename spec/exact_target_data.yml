@@ -122,7 +122,7 @@ email_retrieve_body:
 
 ####################################################################################
 
-triggered_send:
+triggeredsend_add:
   request: <system_name>triggeredsend</system_name><action>add</action><search_type></search_type><search_value></search_value><TriggeredSend xmlns:xsi="http://www.w3.org/2001/XMLSchemainstance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://exacttarget.com/wsdl/partnerAPI"><TriggeredSendDefinition><CustomerKey>email_name</CustomerKey></TriggeredSendDefinition><Subscribers><EmailAddress>recipient@foo.com</EmailAddress><SubscriberKey>recipient@foo.com</SubscriberKey></Subscribers><Attributes><Name>attr_1</Name><Value>val_1</Value></Attributes><Attributes><Name>attr_2</Name><Value>val_2</Value></Attributes></TriggeredSend>
   response: <triggeredsend><triggered_send_info>Triggered Send was added successfully</triggered_send_info><triggered_send_description>0</triggered_send_description></triggeredsend>
 

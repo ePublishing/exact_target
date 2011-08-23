@@ -182,7 +182,7 @@ module ExactTarget
 
     ###################################################################
 
-    def triggered_send(email, customer_key, attributes = {})
+    def triggeredsend_add(email, customer_key, attributes = {})
       build(:triggeredsend, :add) do |xml|
         xml.TriggeredSend :"xmlns:xsi" => "http://www.w3.org/2001/XMLSchemainstance",
                           :"xmlns:xsd" => "http://www.w3.org/2001/XMLSchema",

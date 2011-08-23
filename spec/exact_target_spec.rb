@@ -283,7 +283,7 @@ describe ExactTarget do
 
   #################################################################
 
-  test_et :triggered_send, 'recipient@foo.com', 'email_name', {:attr_1 => 'val_1', :attr_2 => 'val_2'} do
+  test_et :triggeredsend_add, 'recipient@foo.com', 'email_name', {:attr_1 => 'val_1', :attr_2 => 'val_2'} do
     @res.should == 0
   end
 

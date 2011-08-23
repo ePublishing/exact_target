@@ -118,7 +118,7 @@ module ExactTarget
 
     ###################################################################
 
-    def triggered_send(resp)
+    def triggeredsend_add(resp)
       resp.xpath('//triggered_send_description[1]').first.text.to_i
     end
 
