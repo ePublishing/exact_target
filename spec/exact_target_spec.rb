@@ -283,6 +283,12 @@ describe ExactTarget do
 
   #################################################################
 
+  test_et :triggered_send, 'recipient@foo.com', 'email_name', {:attr_1 => 'val_1', :attr_2 => 'val_2'} do
+    @res.should == 0
+  end
+
+  #################################################################
+
   test_et :job_send, 112233, [12345, 12346],
           :suppress_ids => 35612,
           :from_name => 'FrName',

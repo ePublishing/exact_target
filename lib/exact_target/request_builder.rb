@@ -182,6 +182,30 @@ module ExactTarget
 
     ###################################################################
 
+    def triggered_send(email, customer_key, attributes = {})
+      build(:triggeredsend, :add) do |xml|
+        xml.TriggeredSend :"xmlns:xsi" => "http://www.w3.org/2001/XMLSchemainstance",
+                          :"xmlns:xsd" => "http://www.w3.org/2001/XMLSchema",
+                          :"xmlns"     => "http://exacttarget.com/wsdl/partnerAPI" do
+          xml.TriggeredSendDefinition do
+            xml.CustomerKey customer_key
+          end
+          xml.Subscribers do
+            xml.EmailAddress email
+            xml.SubscriberKey email
+          end
+          attributes.each do |key, value|
+            xml.Attributes do
+              xml.Name key.to_s
+              xml.Value value
+            end
+          end
+        end
+      end
+    end
+
+    ###################################################################
+
     def job_send(email_id, list_ids, options={})
       options = job_send_default_options(options)
 
