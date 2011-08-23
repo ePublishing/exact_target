@@ -12,7 +12,7 @@ For more information consule http://www.exacttarget.com/.
 }
   s.email = %q{dmccullars@ePublishing.com}
   s.extra_rdoc_files = ["CHANGELOG", "LICENSE", "README.rdoc"]
-  s.files = ["CHANGELOG", "LICENSE", "README.rdoc", "Rakefile", "lib/exact_target.rb", "lib/exact_target/builder_ext.rb", "lib/exact_target/configuration.rb", "lib/exact_target/error.rb", "lib/exact_target/net_https_hack.rb", "lib/exact_target/request_builder.rb", "lib/exact_target/response_class.erb", "lib/exact_target/response_classes.rb", "lib/exact_target/response_handler.rb", "lib/exact_target/string_ext.rb", "spec/exact_target/net_https_hack_spec.rb", "spec/exact_target/response_handler_spec.rb", "spec/exact_target/string_ext_spec.rb", "spec/exact_target_data.yml", "spec/exact_target_spec.rb", "spec/spec.opts", "spec/subscriber_list_spec.rb", "Manifest", "exact-target.gemspec"]
+  s.files = ["CHANGELOG", "LICENSE", "README.rdoc", "Rakefile", "lib/exact_target.rb", "lib/exact_target/builder_ext.rb", "lib/exact_target/configuration.rb", "lib/exact_target/error.rb", "lib/exact_target/net_https_hack.rb", "lib/exact_target/request_builder.rb", "lib/exact_target/response_class.erb", "lib/exact_target/response_classes.rb", "lib/exact_target/response_handler.rb", "lib/exact_target/string_ext.rb", "spec/exact_target/net_https_hack_spec.rb", "spec/exact_target/response_handler_spec.rb", "spec/exact_target/string_ext_spec.rb", "spec/exact_target_data.yml", "spec/exact_target_spec.rb", "spec/spec.opts", "Manifest", "exact-target.gemspec"]
   s.homepage = %q{http://github.com/ePublishing/exact_target}
   s.rdoc_options = ["--line-numbers", "--inline-source", "--title", "Exact-target", "--main", "README.rdoc"]
   s.require_paths = ["lib"]
