@@ -301,7 +301,6 @@ module ExactTarget
       triggered_send.Subscribers('xmlns' => 'http://exacttarget.com/wsdl/partnerAPI') do |sub|
         sub.Owner do |owner|
           owner.Client do |client|
-            #client.ID $config[:exact_target_channel_member_id]
             client.ID channel_member_id
           end
         end
