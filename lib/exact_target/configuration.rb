@@ -2,7 +2,7 @@ module ExactTarget
   # Used to set up and modify settings for ExactTarget
   class Configuration
 
-    OPTIONS = [:base_url, :username, :password, :readonly, :email_whitelist, :email_blacklist
+    OPTIONS = [:base_url, :username, :password, :readonly, :email_whitelist, :email_blacklist,
                :http_method, :http_open_timeout, :http_read_timeout, :http_proxy].freeze
     STANDARD_READONLY_CALLS = [:list_add, :list_edit, :list_import, :list_delete,
                                :subscriber_add, :subscriber_edit, :subscriber_delete, :subscriber_masterunsub,
