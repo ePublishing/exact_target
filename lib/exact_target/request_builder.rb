@@ -296,9 +296,7 @@ module ExactTarget
           build_system(s, system_name, action, options, &block)
         end
       end
-x =       %Q[<?xml version="1.0"?>#{xml}]
-pp x
-x
+      %Q[<?xml version="1.0"?>#{xml}]
     end
 
     def parse_options(search_type, search_value, options)
