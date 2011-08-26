@@ -327,7 +327,7 @@ module ExactTarget
 
     def ensure_executable!(method, email = nil)
       # stop if the method is readonly
-      raise ReadonlyError.new(method, args) if @config.readonly && @config.readonly.include?(method.to_sym)
+      raise ReadonlyError.new(method) if @config.readonly && @config.readonly.include?(method.to_sym)
 
       ensure_sendable!(email) if email
     end

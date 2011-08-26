@@ -33,9 +33,8 @@ module ExactTarget
   end
 
   class ReadonlyError < Error
-    def initialize(name, *args)
+    def initialize(name)
       @name = name
-      @args = args
     end
 
     def to_s
