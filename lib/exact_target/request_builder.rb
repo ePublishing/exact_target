@@ -218,7 +218,7 @@ module ExactTarget
           attributes.each do |key, value|
             xml.Attributes do
               xml.Name key.to_s
-              xml.Value {|v| v.cdata! value}
+              xml.Value {|v| v.cdata! value.to_s }
             end
           end
         end
