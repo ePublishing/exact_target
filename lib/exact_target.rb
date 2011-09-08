@@ -71,7 +71,7 @@ module ExactTarget
 
     def send_to_exact_target(request)
       verify_configure
-      uri = URI.parse "#{configuration.base_url}?qf=xml&xml=#{URI.escape request}"
+      uri = URI.parse "#{configuration.base_url}?qf=xml&xml=#{URI.escape(URI.escape(request), '+')}"
       http = net_http_or_proxy.new(uri.host, uri.port)
       http.use_ssl = configuration.secure?
       http.open_timeout = configuration.http_open_timeout
