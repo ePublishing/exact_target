@@ -77,7 +77,7 @@ module ExactTarget
       http.open_timeout = configuration.http_open_timeout
       http.read_timeout = configuration.http_read_timeout
       if configuration.log_only
-        log(request)
+        log('error', request)
       else
         resp = http.post(uri.request_uri, { 'qf' => 'xml', 'xml'=> request }.to_query)
         if resp.is_a?(Net::HTTPSuccess)
