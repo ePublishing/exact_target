@@ -76,11 +76,15 @@ module ExactTarget
       http.use_ssl = configuration.secure?
       http.open_timeout = configuration.http_open_timeout
       http.read_timeout = configuration.http_read_timeout
-      resp = http.get(uri.request_uri)
-      if resp.is_a?(Net::HTTPSuccess)
-        resp.body
+      if configuration.log_only
+        log(uri)
       else
-        resp.error!
+        resp = http.get(uri.request_uri)
+        if resp.is_a?(Net::HTTPSuccess)
+          resp.body
+        else
+          resp.error!
+        end
       end
     end
 
