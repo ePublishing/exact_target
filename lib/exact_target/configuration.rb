@@ -3,7 +3,7 @@ module ExactTarget
   class Configuration
 
     OPTIONS = [:base_url, :username, :password,
-               :http_open_timeout, :http_read_timeout, :http_proxy, :log_only].freeze
+               :http_open_timeout, :http_read_timeout, :http_proxy].freeze
 
     # The (optional) base URL for accessing ExactTarget (can be http or https).
     # Defaults to 'https://api.dc1.exacttarget.com/integrate.aspx'
@@ -26,9 +26,6 @@ module ExactTarget
 
     # The (optional) HTTP proxy url
     attr_accessor :http_proxy
-
-    # The optional argument to log the email arguments rather than use the exact target api
-    attr_accessor :log_only
 
     def initialize
       @base_url                 = 'https://api.dc1.exacttarget.com/integrate.aspx'
