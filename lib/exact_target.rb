@@ -71,7 +71,7 @@ module ExactTarget
 
     def send_to_exact_target(request)
       verify_configure
-      uri = URI.parse "#{configuration.base_url}?qf=xml&xml=#{URI.escape(URI.escape(request), '+')}"
+      uri = URI.parse configuration.base_url
       http = net_http_or_proxy.new(uri.host, uri.port)
       http.use_ssl = configuration.secure?
       http.open_timeout = configuration.http_open_timeout
@@ -79,7 +79,7 @@ module ExactTarget
       if configuration.log_only
         log(uri)
       else
-        resp = http.get(uri.request_uri)
+        resp = http.post(uri.request_uri, { 'qf' => 'xml', 'xml'=> request }.to_query)
         if resp.is_a?(Net::HTTPSuccess)
           resp.body
         else
@@ -87,6 +87,7 @@ module ExactTarget
         end
       end
     end
+
 
     # Define ExactTarget methods
     (RequestBuilder.instance_methods(false) & ResponseHandler.instance_methods(false)).each do |m|
