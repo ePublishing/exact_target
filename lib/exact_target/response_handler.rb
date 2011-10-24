@@ -17,7 +17,7 @@ module ExactTarget
 
     %w(email job list subscriber triggered_send).each do |t|
       define_method "handle_#{t}_id_result", lambda { |resp|
-        handle_id_result resp, "#{t}_info", "#{t}_description", /success/i
+        handle_id_result resp, "#{t}_info", "#{t}_description", /success|sucess/i
       }
     end
 
