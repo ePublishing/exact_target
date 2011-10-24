@@ -87,7 +87,7 @@ module ExactTarget
         return [] if s.text =~ /no subscribers found/i
         sri = create_result(SubscriberInformation, s)
         sri.subscriber = create_result(ExactTarget::Subscriber, s)
-        sri
+        return sri
       end
     end
 
