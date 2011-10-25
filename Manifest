@@ -1,9 +1,10 @@
 CHANGELOG
+Gemfile
+Gemfile.lock
 LICENSE
 Manifest
 README.rdoc
 Rakefile
-exact-target.gemspec
 lib/exact-target.rb
 lib/exact_target.rb
 lib/exact_target/builder_ext.rb
@@ -22,3 +23,4 @@ spec/exact_target/string_ext_spec.rb
 spec/exact_target_data.yml
 spec/exact_target_spec.rb
 spec/spec.opts
+spec/spec_helper.rb
