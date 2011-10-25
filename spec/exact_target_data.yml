@@ -122,6 +122,12 @@ email_retrieve_body:
 
 ####################################################################################
 
+triggeredsend_add:
+  request: <system_name>triggeredsend</system_name><action>add</action><search_type></search_type><search_value></search_value><TriggeredSend xmlns:xsi="http://www.w3.org/2001/XMLSchemainstance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://exacttarget.com/wsdl/partnerAPI"><TriggeredSendDefinition><CustomerKey>email_name</CustomerKey></TriggeredSendDefinition><Subscribers><EmailAddress>recipient@foo.com</EmailAddress><SubscriberKey>recipient@foo.com</SubscriberKey></Subscribers><Attributes><Name>attr_1</Name><Value>val_1</Value></Attributes><Attributes><Name>attr_2</Name><Value>val_2</Value></Attributes></TriggeredSend>
+  response: <triggeredsend><triggered_send_info>Triggered Send was added successfully</triggered_send_info><triggered_send_description>0</triggered_send_description></triggeredsend>
+
+####################################################################################
+
 job_send:
   request:  <system_name>job</system_name><action>send</action><search_type>emailid</search_type><search_value>112233</search_value><from_name>FrName</from_name><from_email>fr.email@nowhere.com</from_email><additional>addit</additional><multipart_mime>true</multipart_mime><track_links>false</track_links><send_date>5/3/2011</send_date><send_time>17:35</send_time><lists><list>12345</list><list>12346</list></lists><suppress><list>35612</list></suppress><test_send>true</test_send>
   response: <job><job_info>Job was successfully created.</job_info><job_description>2030602</job_description></job>

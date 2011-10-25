@@ -118,6 +118,12 @@ module ExactTarget
 
     ###################################################################
 
+    def triggeredsend_add(resp)
+      resp.xpath('//triggered_send_description[1]').first.text.to_i
+    end
+
+    ###################################################################
+
     alias :job_send :handle_job_id_result
 
     ###################################################################
