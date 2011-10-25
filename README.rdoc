@@ -164,6 +164,16 @@ tracking functionality is yet implemented.
                        :send_time => '17:35',
                        :test_send => true)
 
+=== Triggered Sends
+
+  # Kick off a triggered send
+  ExactTarget.triggered_send_add(external_key, 
+                                 channel_member_id,
+                                 email_addresses =[],
+                                 options = {})
+  email_addresses is an array of addresses of subscribers
+  options is a hash of name value attributes to pass to the triggered send to add custom data to the email message
+
 ---
 Author::   David McCullars <mailto:dmccullars@ePublishing.com>
 Copyright:: (C) 2011 ePublishing
