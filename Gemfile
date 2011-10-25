@@ -1,3 +1,5 @@
+source :rubygems
+
 gem "builder",    ">= 3.0.0"
 gem "nokogiri",   ">= 1.4.4"
 
