@@ -2,3 +2,5 @@
 /pkg
 /doc
 *.sw*
+.idea
+*.gem

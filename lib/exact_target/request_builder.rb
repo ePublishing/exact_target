@@ -242,6 +242,82 @@ module ExactTarget
     end
 
     ###################################################################
+
+    def list_bulkasync(list_id, list_status = nil)
+      build(
+        :list, :bulkasync,
+        :sub_action => 'Subs_ToFTP',
+        :search_type => :listid,
+        :search_value => list_id
+      ) do |xml|
+        xml.search_status list_status if list_status
+      end
+    end
+
+    def subscriber_bulkasync(list_id)
+      build(:subscriber, :BulkAsync,
+        :sub_action => "SubsStatus_ToFTP",
+        :search_type => "lid",
+        :search_value => list_id)
+    end
+
+    # "retrieves complete tracking data for an email send"
+    def tracking_bulkasync_all(job_id, start_date = nil, end_date = nil)
+      build(:tracking, :BulkAsync,
+        :sub_action => "all_ToFTP",
+        :search_type => "jobID",
+        :search_value => job_id) do |xml|
+        if start_date || end_date
+          start_date = start_date.strftime("%m/%d/%Y") if start_date.respond_to?(:strftime)
+          end_date = end_date.strftime("%m/%d/%Y") if end_date.respond_to?(:strftime)
+          xml.daterange do
+            xml.startdate start_date
+            xml.enddate end_date
+          end
+        end
+      end
+    end
+
+    def tracking_bulkasync_all_attributes(job_id, start_date = nil, end_date = nil)
+      build(:tracking, :BulkAsync,
+        :sub_action => "all_attributes_ToFTP",
+        :search_type => "jobID",
+        :search_value => job_id) do |xml|
+        if start_date || end_date
+          start_date = start_date.strftime("%m/%d/%Y") if start_date.respond_to?(:strftime)
+          end_date = end_date.strftime("%m/%d/%Y") if end_date.respond_to?(:strftime)
+          xml.daterange do
+            xml.startdate start_date
+            xml.enddate end_date
+          end
+        end
+      end
+    end
+
+    def tracking_sent_bulkasync_all(job_id)
+      build(:tracking, :Sent_BulkAsync,
+        :sub_action => "all_ToFTP",
+        :search_type => "jobID",
+        :search_value => job_id)
+    end
+
+    def tracking_sent_bulkasync_all_attributes(job_id, start_date = nil, end_date = nil)
+        build(:tracking, :Sent_BulkAsync,
+          :sub_action => "all_attributes_ToFTP",
+          :search_type => "jobID",
+          :search_value => job_id) do |xml|
+          if start_date || end_date
+            start_date = start_date.strftime("%m/%d/%Y") if start_date.respond_to?(:strftime)
+            end_date = end_date.strftime("%m/%d/%Y") if end_date.respond_to?(:strftime)
+            xml.daterange do
+              xml.startdate start_date
+              xml.enddate end_date
+            end
+          end
+        end
+      end
+
+    ###################################################################
     private
     ###################################################################
 

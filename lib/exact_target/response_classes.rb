@@ -28,6 +28,9 @@ module ExactTarget
         class_from_et_attributes base, :EmailInformation,
           :emailname, :emailid, :emailsubject, :emailcreateddate, :categoryid
 
+        class_from_et_attributes base, :BatchStatus,
+          :status, :batchid, :filename
+
         def base.subscriber_class
           @subscriber_class ||= ResponseClasses.class_from_et_attributes(
             self, :Subscriber, accountinfo_retrieve_attrbs.map(&:name), :Status

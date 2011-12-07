@@ -40,12 +40,21 @@ module ExactTarget
     attr_accessor :email_whitelist
     attr_accessor :email_blacklist
 
+    # optional params for batch
+    attr_accessor :ftp_base_url
+    attr_accessor :ftp_username
+    attr_accessor :ftp_password
+    attr_accessor :export_folder
+    attr_accessor :import_folder
+
     def initialize
       @base_url                 = 'https://api.dc1.exacttarget.com/integrate.aspx'
       @http_open_timeout        = 2
       @http_read_timeout        = 5
       @http_method              = "get"
       @readonly                 = []
+      @export_folder            = 'Export'
+      @import_folder            = 'Import'
     end
 
     def valid?
