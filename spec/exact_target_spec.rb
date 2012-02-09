@@ -309,7 +309,8 @@ describe ExactTarget do
 
   context :send_to_exact_target do
     before(:each) do
-      @path = '/foo?qf=xml&xml=%3Csomexml/%3E'
+      @path = '/foo'
+      @data = 'qf=xml&xml=%3Csomexml/%3E'
       @http = mock('Net::HTTP')
       @http.should_receive(:use_ssl=).with(true)
       @http.should_receive(:open_timeout=).with(2)
@@ -319,13 +320,13 @@ describe ExactTarget do
 
     specify :success do
       resp = stub('Net::HTTPSuccess', :is_a? => true, :body => 'xyz')
-      @http.should_receive(:get).with(@path).and_return(resp)
+      @http.should_receive(:post).with(@path, @data).and_return(resp)
       ExactTarget.send_to_exact_target('<somexml/>').should == 'xyz'
     end
 
     specify :error do
       resp = stub('Net::HTTPFailure', :error! => 'err')
-      @http.should_receive(:get).with(@path).and_return(resp)
+      @http.should_receive(:post).with(@path, @data).and_return(resp)
       ExactTarget.send_to_exact_target('<somexml/>').should == 'err'
     end
   end
