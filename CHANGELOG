@@ -1,3 +1,9 @@
+v0.1.8. Bump version to 0.1 to reflect use in production environments.  Also incorporate
+enhancements from Jeff Ching:
+
+The "adddefinition" and "updatedefinition" API calls were not documented clearly
+enough to implement a clean solution.
+
 v0.0.6. Pull in enhancements from Paul Nock and add as contributor:
 
 I added some triggered send support, and also switched 'send_to_exact_target' to

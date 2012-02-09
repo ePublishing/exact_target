@@ -6,9 +6,9 @@ require 'spec/rake/spectask'
 task :default => :gem
 
 Echoe.new("exact-target") do |s|
-  s.author = "David McCullars"
+  s.author = ["David McCullars", "Paul Nock", "Jeff Ching"]
   s.project = "exact-target"
-  s.email = "dmccullars@ePublishing.com"
+  s.email = ["dmccullars@ePublishing.com", "nocksf@gmail.com"]
   s.url = "http://github.com/ePublishing/exact_target"
   s.docs_host = "http://rdoc.info/github/ePublishing/exact_target/master/frames"
   s.rdoc_pattern = /README|TODO|LICENSE|CHANGELOG|BENCH|COMPAT|exceptions|behaviors|exact-target.rb/

@@ -5,6 +5,7 @@ LICENSE
 Manifest
 README.rdoc
 Rakefile
+exact-target.gemspec
 lib/exact-target.rb
 lib/exact_target.rb
 lib/exact_target/builder_ext.rb
