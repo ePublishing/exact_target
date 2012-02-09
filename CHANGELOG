@@ -1,3 +1,15 @@
+v0.0.6. Pull in enhancements from Paul Nock and add as contributor:
+
+I added some triggered send support, and also switched 'send_to_exact_target' to
+http POST instead of GET. In our case, we were starting to generate some long xml
+parameters and we didn't want to run into size limits for GET. I'm not completely
+sure how generic the triggered send xml is, but it works well in our case. I'm not
+sure if the different Exact Target Account types affect this.
+
+Additionally, we were seeing some issues trying to register Facebook proxy email
+addresses with Exact Target, for example app+asdfadsfasdfasdf@proxymail.facebook.com.
+It was easier to simply POST this data than trying to properly escape the + in the data.
+
 v0.0.5. Fix corrupted gem
 v0.0.4. Fix gem to include CHANGELOG
 v0.0.3. Allow for passing ExactTarget::Subscriber into subscriber_add and subscriber_edit
