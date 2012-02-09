@@ -73,7 +73,7 @@ module ExactTarget
     end
 
     def batch_inquire(resp)
-      resp.xpath('//Batch/status[1]').first.text
+      create_result(BatchStatus, resp.xpath('//Batch').first)
     end
 
     ###################################################################
@@ -120,7 +120,32 @@ module ExactTarget
 
     ###################################################################
 
+    def triggeredsend_add(resp)
+      resp.xpath('//triggered_send_description[1]').first.text.to_i
+    end
+
+    ###################################################################
+
     alias :job_send :handle_job_id_result
+
+    ###################################################################
+
+    def list_bulkasync(resp)
+      resp.xpath('//batchID').first.text.to_i
+    end
+
+    def subscriber_bulkasync(resp)
+      resp.xpath('//batchID').first.text.to_i
+    end
+
+    def tracking_sent_bulkasync_all(resp)
+      resp.xpath('//batchID').first.text.to_i
+    end
+
+    def tracking_sent_bulkasync_all_attributes(resp)
+      resp.xpath('//batchID').first.text.to_i
+    end
+
 
     ###################################################################
     private

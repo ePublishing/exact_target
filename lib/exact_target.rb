@@ -71,13 +71,21 @@ module ExactTarget
 
     def send_to_exact_target(request)
       verify_configure
-      uri = URI.parse configuration.base_url
+
+      data = "qf=xml&xml=#{URI.escape(URI.escape(request), "&")}"
+      uri = URI.parse(configuration.base_url)
+
       http = net_http_or_proxy.new(uri.host, uri.port)
       http.use_ssl = configuration.secure?
       http.open_timeout = configuration.http_open_timeout
       http.read_timeout = configuration.http_read_timeout
-      data = "qf=xml&xml=#{URI.escape URI.escape(request), '&'}"
-      resp = http.post(uri.request_uri, data)
+
+      if configuration.http_method.to_s == "post"
+        resp = http.post(uri.request_uri, data)
+      else
+        resp = http.get(uri.request_uri + "?" + data)
+      end
+
       if resp.is_a?(Net::HTTPSuccess)
         resp.body
       else

@@ -154,7 +154,7 @@ describe ExactTarget do
   end
 
   test_et :batch_inquire, 8912 do
-    @res.should == 'Completed'
+    @res.status.should == 'Completed'
   end
 
   #################################################################
@@ -283,6 +283,12 @@ describe ExactTarget do
 
   #################################################################
 
+  test_et :triggeredsend_add, 'recipient@foo.com', 'email_name', {:attr_1 => 'val_1', :attr_2 => 'val_2'} do
+    @res.should == 0
+  end
+
+  #################################################################
+
   test_et :job_send, 112233, [12345, 12346],
           :suppress_ids => 35612,
           :from_name => 'FrName',
@@ -318,13 +324,16 @@ describe ExactTarget do
       Net::HTTP.should_receive(:new).with('base.url.com', 443).and_return(@http)
     end
 
+    after { ExactTarget.configuration.http_method = nil }
+
     specify :success do
       resp = stub('Net::HTTPSuccess', :is_a? => true, :body => 'xyz')
-      @http.should_receive(:post).with(@path, @data).and_return(resp)
+      @http.should_receive(:get).with("#{@path}?#{@data}").and_return(resp)
       ExactTarget.send_to_exact_target('<somexml/>').should == 'xyz'
     end
 
     specify :error do
+      ExactTarget.configuration.http_method = :post
       resp = stub('Net::HTTPFailure', :error! => 'err')
       @http.should_receive(:post).with(@path, @data).and_return(resp)
       ExactTarget.send_to_exact_target('<somexml/>').should == 'err'

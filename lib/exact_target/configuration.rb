@@ -2,8 +2,11 @@ module ExactTarget
   # Used to set up and modify settings for ExactTarget
   class Configuration
 
-    OPTIONS = [:base_url, :username, :password,
-               :http_open_timeout, :http_read_timeout, :http_proxy].freeze
+    OPTIONS = [:base_url, :username, :password, :readonly, :email_whitelist, :email_blacklist,
+               :http_method, :http_open_timeout, :http_read_timeout, :http_proxy].freeze
+    STANDARD_READONLY_CALLS = [:list_add, :list_edit, :list_import, :list_delete,
+                               :subscriber_add, :subscriber_edit, :subscriber_delete, :subscriber_masterunsub,
+                               :email_add, :email_add_text, :job_send].freeze
 
     # The (optional) base URL for accessing ExactTarget (can be http or https).
     # Defaults to 'https://api.dc1.exacttarget.com/integrate.aspx'
@@ -27,10 +30,31 @@ module ExactTarget
     # The (optional) HTTP proxy url
     attr_accessor :http_proxy
 
+    # The HTTP method to make the request with
+    attr_accessor :http_method
+
+    # The (optional) readonly flag (defaults to false)
+    attr_accessor :readonly
+
+    # (optional) limiting triggeredsend email addresses
+    attr_accessor :email_whitelist
+    attr_accessor :email_blacklist
+
+    # optional params for batch
+    attr_accessor :ftp_base_url
+    attr_accessor :ftp_username
+    attr_accessor :ftp_password
+    attr_accessor :export_folder
+    attr_accessor :import_folder
+
     def initialize
       @base_url                 = 'https://api.dc1.exacttarget.com/integrate.aspx'
       @http_open_timeout        = 2
       @http_read_timeout        = 5
+      @http_method              = "get"
+      @readonly                 = []
+      @export_folder            = 'Export'
+      @import_folder            = 'Import'
     end
 
     def valid?
