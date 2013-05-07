@@ -72,7 +72,7 @@ module ExactTarget
     def send_to_exact_target(request)
       verify_configure
 
-      data = "qf=xml&xml=#{URI.escape(URI.escape(request), "&")}"
+      data = "qf=xml&xml=#{URI.escape(URI.escape(request), "&+")}"
       uri = URI.parse(configuration.base_url)
 
       http = net_http_or_proxy.new(uri.host, uri.port)
