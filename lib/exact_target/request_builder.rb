@@ -99,6 +99,31 @@ module ExactTarget
       )
     end
 
+    # Public: Builds an BulkAsync Subscriber request.  A BulkAsync is used to
+    # retrieve information from ExactTarget that is too big to return in
+    # a normal SOAP call.  Instead, the results are deposited on an SFTP server
+    # for later retrieval.
+    #
+    # list_id - An optional Integer list id.  When not supplied, returns the
+    #           subscriber statuses for *all* lists.
+    #
+    # Examples
+    #
+    #   batch_id = ExactTarget.bulk_async_retrieve_subscriber_statuses
+    #   => 12345
+    #   ExactTarget.batch_inquire(batch_id)
+    #
+    # Returns an XML String.
+    def bulk_async_retrieve_subscriber_statuses(list_id = :no_list_id_supplied)
+      ensure_executable!("subscriber_bulk_async")
+      args = { :sub_action => 'SubsStatus_ToFTP' }
+
+      args.merge!(:search_type => :lid, :search_value => Integer(list_id)) \
+        unless list_id == :no_list_id_supplied
+
+      build(:subscriber, 'BulkAsync', args)
+    end
+
     ###################################################################
 
     def triggered_send_add(external_key, channel_member_id, email_addresses, options={})

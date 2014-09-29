@@ -76,6 +76,10 @@ module ExactTarget
       create_result(BatchStatus, resp.xpath('//Batch').first)
     end
 
+    def bulk_async_retrieve_subscriber_statuses(resp)
+      resp.xpath('//batchID').text.to_i
+    end
+
     ###################################################################
 
     alias :subscriber_add :handle_subscriber_id_result
