@@ -1,8 +1,10 @@
-source :rubygems
+source 'https://rubygems.org'
 
 gem "builder",    ">= 3.0.0"
 gem "nokogiri",   ">= 1.4.4"
 
-gem "rspec",     '= 1.3.1', :require => false
-gem 'simplecov', '>= 0.4.0', :require => false
-gem "simplecov-rcov", ">= 0.2.0", :require => false
+group :test do
+  gem "rspec", '~> 2.14.1'
+  gem 'simplecov', '>= 0.4.0'
+  gem "simplecov-rcov", ">= 0.2.0"
+end

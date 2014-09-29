@@ -14,8 +14,11 @@ describe ExactTarget do
   #################################################################
 
   before(:all) do
-    @logger = mock(:logger)
     @xml = YAML.load(File.read __FILE__.sub('_spec.rb', '_data.yml'))
+  end
+
+  before(:each) do
+    @logger = double(:logger)
     ExactTarget.configure do |config|
       config.base_url = 'https://base.url.com/foo'
       config.username = 'a_user'
@@ -317,7 +320,7 @@ describe ExactTarget do
     before(:each) do
       @path = '/foo'
       @data = 'qf=xml&xml=%3Csomexml/%3E'
-      @http = mock('Net::HTTP')
+      @http = double('Net::HTTP')
       @http.should_receive(:use_ssl=).with(true)
       @http.should_receive(:open_timeout=).with(2)
       @http.should_receive(:read_timeout=).with(5)
