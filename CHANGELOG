@@ -1,3 +1,6 @@
+v0.1.9. Replace bulk async implementation with method that returns all the
+subscribers.
+
 v0.1.8. Bump version to 0.1 to reflect use in production environments.  Also incorporate
 enhancements from Jeff Ching:
 
